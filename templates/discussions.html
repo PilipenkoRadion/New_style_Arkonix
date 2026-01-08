@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Обсуждения - ARKONIX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .discussions-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 20px;
+        }
+
+        .discussions-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .discussions-header h1 {
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 10px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .discussions-header p {
+            color: #cbd5f5;
+            font-size: 1.1em;
+        }
+
+        .discussion-form {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+        }
+
+        .discussion-form h2 {
+            margin-bottom: 30px;
+            color: #38bdf8;
+            font-size: 1.8em;
+            font-weight: 800;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5f5;
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            color: #020617;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #818cf8;
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+        }
+
+        .info-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .info-box ul {
+            margin: 10px 0 0 20px;
+            color: #cbd5f5;
+        }
+
+        .info-box li {
+            padding: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="/" style="color: inherit; text-decoration: none;">ARKONIX</a>
+            </div>
+
+            <nav class="nav">
+                <a href="/">Главная</a>
+                <a href="/services">Услуги</a>
+                <a href="/team">Команда</a>
+                <a href="/discussions">Обсуждения</a>
+            </nav>
+
+            <div class="user-panel">
+                <a href="/profile">Личный кабинет</a>
+                <a href="/logout">Выход</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="discussions-container">
+        <div class="discussions-header">
+            <h1>Обсуждение проекта</h1>
+            <p>Опишите вашу задачу, и мы свяжемся с вами для обсуждения</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📝 Как это работает?</h3>
+            <ul>
+                <li>Выберите тип услуги, которая вас интересует</li>
+                <li>Опишите детали вашего проекта</li>
+                <li>Наш специалист свяжется с вами через чат</li>
+                <li>Вы сможете обсудить все детали в режиме реального времени</li>
+            </ul>
+        </div>
+
+        <div class="discussion-form">
+            <h2>Создать обсуждение</h2>
+            <form method="POST" action="/create_chat">
+                <div class="form-group">
+                    <label for="service">Тип услуги *</label>
+                    <select name="service" id="service" required>
+                        <option value="">Выберите услугу</option>
+                        <option value="Веб-разработка">🌐 Веб-разработка</option>
+                        <option value="Telegram-боты">🤖 Telegram-боты</option>
+                        <option value="AI-решения">🧠 AI-решения</option>
+                        <option value="Мобильные приложения">📱 Мобильные приложения</option>
+                        <option value="Backend-разработка">⚙️ Backend-разработка</option>
+                        <option value="Консультация">💡 Консультация</option>
+                        <option value="Другое">🔧 Другое</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Описание проекта *</label>
+                    <textarea name="description" id="description"
+                        placeholder="Расскажите подробнее о вашем проекте: какие задачи нужно решить, какие функции должны быть реализованы, есть ли дедлайны..."
+                        required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Создать обсуждение</button>
+            </form>
+
+            <a href="/profile" class="back-link">← Вернуться в личный кабинет</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>Телефон: +38 095 713 66 14</p>
+                <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                        data-cfemail="70190407424342464530171d11191c5e131f1d">[email&#160;protected]</a></p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Соцсети</h4>
+                <a href="https://t.me/worldit23">Telegram</a><br>
+                <a href="https://discord.gg/uKzRMmshnp">Discord</a>
+            </div>
+
+            <div class="footer-section">
+                <a href="/terms">Условия использования</a>
+                <a href="/privacy">Политика и правила</a>
+            </div>
+        </div>
+
+        <div class
